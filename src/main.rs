@@ -24,10 +24,10 @@ fn format_info_name(info_name: &str) -> String {
     format!("\x1b[38;2;255;254;187m{}\x1b[0m", info_name)
 }
 
-fn get_headline(system: &System) -> String {
+fn get_headline(system: &System) -> (String, usize) {
     let host_name = System::host_name().expect("Error obtaining system host name");
     let user_name = get_current_user_name(&system);
-    format!("\x1b[38;2;166;252;104m{}\x1b[0m@\x1b[38;2;166;252;104m{}\x1b[0m", user_name, host_name)
+    (format!("\x1b[38;2;166;252;104m{}\x1b[0m@\x1b[38;2;166;252;104m{}\x1b[0m", user_name, host_name), host_name.len() + user_name.len())
 }
 
 fn get_current_shell() -> Option<String> {
@@ -68,10 +68,18 @@ fn main() {
     for (index, part) in parts.enumerate() {
         match index {
             0 => {
-                println!("{}   {}", part, get_headline(&system));
+                let (headline, _) = get_headline(&system);
+                println!("{}   {}", part, headline);
             },
             1 => {
-                println!("{}   --------------------------------", part);
+                let (_, headline_len) = get_headline(&system);
+                let mut line = String::from("");
+
+                for _ in 0..headline_len {
+                    line.push('-');
+                }
+
+                println!("{}   {}", part, line);
             },
             2 => {
                 let long_os_version = System::long_os_version().unwrap();
@@ -99,7 +107,8 @@ fn main() {
                 println!("{}   {}: {}", part, format_info_name("Shell"), get_current_shell().unwrap());
             },
             8 => {
-                println!("{}   {}:", part, format_info_name("Resolution"));
+                let (width, height) = get_screen_size().unwrap();
+                println!("{}   {}: {}x{}", part, format_info_name("Resolution"), width, height);
             },
             9 => {
                 println!("{}   {}:", part, format_info_name("DE"));
