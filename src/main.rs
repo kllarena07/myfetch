@@ -1,4 +1,4 @@
-use sysinfo::{System, Users};
+use sysinfo::{System, Users, get_current_pid};
 use rascii_art::{
     render_to,
     RenderOptions,
@@ -28,6 +28,23 @@ fn get_headline(system: &System) -> String {
     let host_name = System::host_name().expect("Error obtaining system host name");
     let user_name = get_current_user_name(&system);
     format!("\x1b[38;2;166;252;104m{}\x1b[0m@\x1b[38;2;166;252;104m{}\x1b[0m", user_name, host_name)
+}
+
+fn get_current_shell() -> Option<String> {
+    let mut sys = System::new_all();
+    sys.refresh_all();
+    
+    // Get current process's PID
+    let current_pid = get_current_pid().ok()?;
+    
+    // Get the current process
+    let current_process = sys.process(current_pid)?;
+    
+    // Get parent PID and then parent process
+    let parent_pid = current_process.parent()?;
+    let parent_process = sys.process(parent_pid)?;
+    
+    Some(parent_process.name().to_string_lossy().to_string())
 }
 
 fn main() {
@@ -79,7 +96,7 @@ fn main() {
                 println!("{}   {}:", part, format_info_name("Packages"));
             },
             7 => {
-                println!("{}   {}:", part, format_info_name("Shell"));
+                println!("{}   {}: {}", part, format_info_name("Shell"), get_current_shell().unwrap());
             },
             8 => {
                 println!("{}   {}:", part, format_info_name("Resolution"));
