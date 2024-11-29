@@ -11,12 +11,12 @@ fn get_current_user_name(system: &System) -> String {
             match process.user_id() {
                 Some(user_id) => match users.get_user_by_id(user_id) {
                     Some(curr_user) => curr_user.name().to_string(),
-                    None => "Unknown".to_string(), // User ID found, but no user object
+                    None => "Unknown".to_string(),
                 },
-                None => "Unknown".to_string(), // No user ID for the process
+                None => "Unknown".to_string(),
             }
         }
-        None => "Unknown".to_string(), // Process not found
+        None => "Unknown".to_string(),
     }
 }
 
