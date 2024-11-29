@@ -70,7 +70,11 @@ fn main() {
                 println!("{}   {}: {}", part, format_info_name("Kernel"), kernel_version);
             },
             5 => {
-                println!("{}   {}:", part, format_info_name("Uptime"));
+                let runtime_sec = System::uptime();
+                let runtime_days = runtime_sec / 86400;
+                let runtime_hours = (runtime_sec % 86400) / 3600;
+                let runtime_mins = (runtime_sec % 3600) / 60;
+                println!("{}   {}: {} days, {} hours, {} mins", part, format_info_name("Uptime"), runtime_days, runtime_hours, runtime_mins);
             },
             6 => {
                 println!("{}   {}:", part, format_info_name("Packages"));
