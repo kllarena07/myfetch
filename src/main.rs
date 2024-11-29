@@ -45,7 +45,6 @@ fn main() {
     .unwrap();
 
     let parts = buffer.split('\n');
-
     let mut system = System::new_all();
     system.refresh_all();
 
@@ -98,7 +97,8 @@ fn main() {
                 println!("{}   {}:", part, format_info_name("Terminal"));
             },
             13 => {
-                println!("{}   {}:", part, format_info_name("CPU"));
+                let cpu_brand = system.cpus()[0].brand();
+                println!("{}   {}: {}", part, format_info_name("CPU"), cpu_brand);
             },
             14 => {
                 println!("{}   {}:", part, format_info_name("GPU"));
