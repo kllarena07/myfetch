@@ -6,3 +6,4 @@ edition = "2021"
 [dependencies]
 rascii_art = "0.4.5"
 sysinfo = "0.32.1"
+winit = "0.30.5"
