@@ -54,7 +54,6 @@ fn main() {
         r"/Users/kllarena/documents/github/myfetch/mental_illness.png",
         &mut buffer,
         &RenderOptions::new()
-            .width(80)
             .height(30)
             .colored(true)
             .charset(rascii_art::charsets::BLOCK)
@@ -87,49 +86,25 @@ fn main() {
                 println!("{}   {}: {}{}", part, format_info_name("OS"), long_os_version, cpu_arch);
             },
             3 => {
-                println!("{}   {}:", part, format_info_name("Host"));
-            }
-            4 => {
+                let kernel_name = System::name().unwrap();
                 let kernel_version = System::kernel_version().unwrap();
-                println!("{}   {}: {}", part, format_info_name("Kernel"), kernel_version);
+                println!("{}   {}: {} {}", part, format_info_name("Kernel"), kernel_name, kernel_version);
             },
-            5 => {
+            4 => {
                 let runtime_sec = System::uptime();
                 let runtime_days = runtime_sec / 86400;
                 let runtime_hours = (runtime_sec % 86400) / 3600;
                 let runtime_mins = (runtime_sec % 3600) / 60;
                 println!("{}   {}: {} days, {} hours, {} mins", part, format_info_name("Uptime"), runtime_days, runtime_hours, runtime_mins);
             },
-            6 => {
-                println!("{}   {}:", part, format_info_name("Packages"));
-            },
-            7 => {
+            5 => {
                 println!("{}   {}: {}", part, format_info_name("Shell"), get_current_shell().unwrap());
             },
-            8 => {
-                let (width, height) = get_screen_size().unwrap();
-                println!("{}   {}: {}x{}", part, format_info_name("Resolution"), width, height);
-            },
-            9 => {
-                println!("{}   {}:", part, format_info_name("DE"));
-            },
-            10 => {
-                println!("{}   {}:", part, format_info_name("WM"));
-            },
-            11 => {
-                println!("{}   {}:", part, format_info_name("WM Theme"));
-            },
-            12 => {
-                println!("{}   {}:", part, format_info_name("Terminal"));
-            },
-            13 => {
+            6 => {
                 let cpu_brand = system.cpus()[0].brand();
                 println!("{}   {}: {}", part, format_info_name("CPU"), cpu_brand);
             },
-            14 => {
-                println!("{}   {}:", part, format_info_name("GPU"));
-            },
-            15 => {
+            7 => {
                 let used_memory = system.used_memory() / 1048576;
                 let total_memory = system.total_memory() / 1048576;
                 println!("{}   {}: {} MiB / {} MiB", part, format_info_name("Memory"), used_memory, total_memory);
